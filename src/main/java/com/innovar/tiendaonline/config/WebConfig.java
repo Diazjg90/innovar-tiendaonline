@@ -12,12 +12,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Obtenemos la ruta absoluta de la carpeta 'uploads'
+        // Expone la carpeta 'uploads' externa para que sea accesible desde el navegador
         Path uploadDir = Paths.get("uploads");
         String uploadPath = uploadDir.toFile().getAbsolutePath();
 
-        // Mapeamos la URL /uploads/** hacia la carpeta física en el disco
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/" + uploadPath + "/");
+                .addResourceLocations("file:" + uploadPath + "/");
     }
 }
