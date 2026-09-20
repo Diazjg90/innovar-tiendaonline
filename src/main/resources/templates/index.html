@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>innovAR - Tienda Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .navbar-ml { background-color: #fff159; }
+        .card-img-top { height: 180px; object-fit: cover; }
+        @media (min-width: 768px) { .card-img-top { height: 220px; } }
+        .card { transition: transform 0.2s, box-shadow 0.2s; border: none; }
+        .precio { font-size: 1.3rem; font-weight: 700; color: #333; }
+        .badge-cat { background-color: #e9ecef; color: #495057; font-size: 0.7rem; }
+
+        /* Estilo y sombreado de categorías */
+        .btn-categoria {
+            transition: all 0.25s ease-in-out;
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-categoria:hover,
+        .btn-categoria:focus,
+        .btn-categoria:active {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            transform: translateY(-2px);
+            background-color: #f8f9fa !important;
+            color: #000 !important;
+        }
+
+        .nav-link {
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100" style="overflow-x: hidden;">
+
+    <!-- Header / Navbar Principal -->
+    <nav class="navbar navbar-expand-lg navbar-ml mb-2 shadow-sm py-2">
+        <div class="container">
+            <!-- Marca + Botón Hamburguesa en celular -->
+            <div class="d-flex align-items-center justify-content-between w-100 d-lg-none mb-2">
+                <button class="navbar-toggler border-dark" type="button" data-bs-toggle="collapse" data-bs-target="#menuCategorias" aria-controls="menuCategorias" aria-expanded="false" aria-label="Ver categorías">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <a class="navbar-brand fw-bold text-dark fs-3 m-0" href="/">innovAR</a>
+
+                <div class="d-flex gap-2">
+                    <a href="/carrito" class="btn btn-dark btn-sm fw-semibold">🛒</a>
+                    <a href="/admin/productos" class="btn btn-outline-dark btn-sm fw-semibold">🔒</a>
+                </div>
+            </div>
+
+            <!-- Marca para escritorios -->
+            <a class="navbar-brand fw-bold text-dark fs-3 d-none d-lg-block" href="/">innovAR</a>
+
+            <!-- Menú Desplegable con Categorías -->
+            <div class="collapse navbar-collapse mt-2 mt-lg-0" id="menuCategorias">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark rounded px-3" href="/">Todas las Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark rounded px-3" href="/?categoria=Sublimación">Sublimación</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark rounded px-3" href="/?categoria=Fotos">Fotos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark rounded px-3" href="/?categoria=Stickers">Stickers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark rounded px-3" href="/?categoria=Personalizados">Personalizados</a>
+                    </li>
+                </ul>
+
+                <!-- Accesos directos en Escritorio -->
+                <div class="d-none d-lg-flex gap-2">
+                    <a href="/carrito" class="btn btn-dark btn-sm fw-semibold">
+                        🛒 Carrito
+                    </a>
+                    <a href="/admin/productos" class="btn btn-outline-dark btn-sm fw-semibold">
+                        🔒 Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Informativo de Medios de Pago -->
+    <div class="bg-white border-bottom shadow-sm py-2 mb-3">
+        <div class="container text-center">
+            <span class="text-secondary small fw-bold">
+                💳 Medios de pago aceptados: <span class="text-dark">Transferencia</span> y <span class="text-dark">Efectivo</span> 💵
+            </span>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="container mb-5 px-3 flex-grow-1">
+        
+        <h5 class="mb-3 text-secondary fw-bold fs-6">Productos Destacados</h5>
+
+        <!-- Grilla de Productos -->
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-3">
+            <div class="col" th:each="p : ${productos}">
+                <div class="card h-100 shadow-sm">
+                    
+                    <a th:href="@{/producto/{id}(id=${p.id})}">
+                        <img th:if="${p.imagenUrl != null}" th:src="${p.imagenUrl}" class="card-img-top" th:alt="${p.titulo}">
+                        <img th:if="${p.imagenUrl == null}" src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="card-img-top">
+                    </a>
+
+                    <div class="card-body p-2 p-md-3 d-flex flex-column">
+                        <span class="badge badge-cat align-self-start mb-1" th:text="${p.categoria}">Categoría</span>
+                        
+                        <a th:href="@{/producto/{id}(id=${p.id})}" class="text-decoration-none text-dark">
+                            <h6 class="card-title text-truncate mb-1 fw-bold" th:text="${p.titulo}">Título</h6>
+                        </a>
+
+                        <p class="precio mb-2" th:text="${'$' + p.precio}">$0.00</p>
+                        
+                        <a th:href="@{/producto/{id}(id=${p.id})}" class="btn btn-outline-primary btn-sm w-100 mt-auto fw-semibold">
+                            Ver detalle 🔍
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(productos)}" class="alert alert-info text-center mt-4 py-4">
+            No se encontraron productos disponibles en esta categoría.
+        </div>
+
+    </div>
+
+    <!-- Pie de página (Footer) -->
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container">
+            <!-- Enlace a Instagram -->
+            <div class="mb-2">
+                <a href="https://www.instagram.com/i.nnovar/?hl=es-la" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fs-5 d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-instagram text-warning fs-4"></i>
+                    <span class="fw-semibold">Síguenos en Instagram</span>
+                </a>
+            </div>
+            <!-- Leyenda de Derechos Reservados -->
+            <p class="text-secondary small m-0">
+                © 2026 - todos los derechos reservados
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
