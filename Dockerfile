@@ -1,15 +1,17 @@
-# Paso 1: Usar una imagen oficial de Java 17
+# Paso 1: Usar Alpine con Java 17 e instalar Maven directamente
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
 
-# Copiar archivos del proyecto
+# Instalar Maven en la imagen
+RUN apk add --no-cache maven
+
+# Copiar el código del proyecto
 COPY . .
 
-# Dar permisos de ejecución al ejecutable de Maven e iniciar la compilación
-RUN chmod +x ./mvnw
-RUN ./mvnw clean package -DskipTests
+# Compilar omitiendo tests
+RUN mvn clean package -DskipTests
 
-# Paso 2: Imagen final liviana para ejecutar la aplicación
+# Paso 2: Imagen de ejecución liviana
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
