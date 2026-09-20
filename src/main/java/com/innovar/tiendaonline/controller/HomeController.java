@@ -30,10 +30,16 @@ public class HomeController {
     }
     // Vista de detalle del producto
     @GetMapping("/producto/{id}")
-    public String detalleProducto(@PathVariable Long id, Model model) {
+    public String verDetalle(@PathVariable("id") Long id, Model model) {
+        // Buscar en la base de datos de Aiven o redirigir si no existe
         Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado ID: " + id));
+                .orElse(null);
+
+        if (producto == null) {
+            return "redirect:/"; // Redirige al inicio si el ID no existe
+        }
+
         model.addAttribute("producto", producto);
-        return "detalle-producto";
+        return "detalle-producto"; // Nombre de tu plantilla HTML
     }
 }

@@ -40,14 +40,13 @@
                 <!-- Columna Derecha: Detalles del Producto centrados verticalmente -->
                 <div class="col-md-6 d-flex flex-column justify-content-center h-100">
                     <span class="badge bg-secondary mb-2 align-self-start" th:text="${producto.categoria}">Categoría</span>
-                    <h1 class="h2 fw-bold mb-3" th:text="${producto.titulo}">Título del Producto</h1>
-                    
-                    <div class="precio-detalle mb-3" th:text="${'$' + producto.precio}">$0.00</div>
-                    
-                    <h5 class="text-muted fs-6 mb-2">Descripción del producto</h5>
-                    <p class="text-secondary mb-4" style="white-space: pre-line;" th:text="${producto.descripcion}">
-                        Descripción detallada del producto personalizado...
-                    </p>
+                    <!-- Ejemplo de renderizado seguro con Thymeleaf -->
+                        <h1 th:text="${producto?.titulo}">Nombre del producto</h1>
+                        <p th:text="${producto?.descripcion}">Descripción...</p>
+                        <span th:text="${'$' + producto?.precio}">$0.00</span>
+
+                        <!-- Imagen con ruta segura -->
+                        <img th:src="${producto?.imagenUrl}" class="img-fluid" th:alt="${producto?.titulo}">
 
                     <!-- Formulario de Agregar al Carrito -->
                     <form th:action="@{/carrito/agregar/{id}(id=${producto.id})}" method="post" class="mt-2">
