@@ -27,12 +27,12 @@
                 
                 <!-- Columna Izquierda: Imagen Completa -->
                 <div class="col-md-6 text-center bg-white p-3 rounded">
-                    <img th:if="${producto.imagenUrl != null}" 
-                         th:src="{${producto.imagenUrl}}" 
+                    <img th:if="${p.imagenUrl != null}" 
+                         th:src="{${p.imagenUrl}}" 
                          class="card-img-top"
-                         th:alt="${producto.titulo}">
+                         th:alt="${p.titulo}">
                     
-                    <img th:if="${producto.imagenUrl == null}" 
+                    <img th:if="${p.imagenUrl == null}" 
                          src="https://via.placeholder.com/400x300?text=Sin+Imagen" 
                          class="img-fluid img-detalle">
                 </div>
