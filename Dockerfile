@@ -1,8 +1,8 @@
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copiar el ejecutable generado localmente
+# Copiar ejecutable generado
 COPY target/*.jar app.jar
 
-EXPOSE 8081
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
