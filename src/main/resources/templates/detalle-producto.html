@@ -28,8 +28,8 @@
                 <!-- Columna Izquierda: Imagen Completa -->
                 <div class="col-md-6 text-center bg-white p-3 rounded">
                     <img th:if="${producto.imagenUrl != null}" 
-                         th:src="@{${p.imagenUrl}}" 
-                         class="img-fluid img-detalle shadow-sm" 
+                         th:src="{${producto.imagenUrl}}" 
+                         class="card-img-top"
                          th:alt="${producto.titulo}">
                     
                     <img th:if="${producto.imagenUrl == null}" 

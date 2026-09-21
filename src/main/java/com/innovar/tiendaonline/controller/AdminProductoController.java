@@ -2,7 +2,10 @@ package com.innovar.tiendaonline.controller;
 
 import com.innovar.tiendaonline.model.Producto;
 import com.innovar.tiendaonline.repository.ProductoRepository;
+import com.innovar.tiendaonline.service.CloudinaryService;
 import com.innovar.tiendaonline.service.FileUploadService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,19 +38,19 @@ public class AdminProductoController {
         return "admin/formulario-producto";
     }
 
-    @PostMapping("/guardar")
-    public String guardarProducto(@ModelAttribute Producto producto,@RequestParam(value = "file", required = false) MultipartFile archivo) throws IOException {
-    
-        // Si se subió un nuevo archivo, guardamos la nueva imagen
-        if (archivo != null && !archivo.isEmpty()) {
-            String rutaImagen = fileUploadService.guardarImagen(archivo);
-            producto.setImagenUrl(rutaImagen);
-        } else if (producto.getId() != null) {
-            // Si es una edición y no se subió foto nueva, mantenemos la foto que ya tenía
-            Producto productoExistente = productoRepository.findById(producto.getId()).orElse(null);
-            if (productoExistente != null) {
-                producto.setImagenUrl(productoExistente.getImagenUrl());
-            }
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
+    @PostMapping("/admin/productos/guardar")
+    public String guardarProducto(@ModelAttribute Producto producto, @RequestParam("file") MultipartFile file) throws IOException {
+        
+        if (!file.isEmpty()) {
+            String urlImagen = cloudinaryService.subirImagen(file);
+            producto.setImagenUrl(urlImagen);
+        }
+
+        productoRepository.save(producto);
+        return "redirect:/admin/productos";
     }
 
     productoRepository.save(producto);

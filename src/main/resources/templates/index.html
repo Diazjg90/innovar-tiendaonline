@@ -114,8 +114,8 @@
                 <div class="card h-100 shadow-sm">
                     
                     <a th:href="@{/producto/{id}(id=${p.id})}">
-                        <img th:if="${p.imagenUrl != null}" th:src="@{${p.imagenUrl}}" class="card-img-top" th:alt="${p.titulo}">
-                        <img th:if="${p.imagenUrl == null}" src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="card-img-top">
+                        <img th:if="${producto.imagenUrl != null}" th:src="{${producto.imagenUrl}}" class="card-img-top" th:alt="${p.titulo}">
+                        <img th:if="${producto.imagenUrl == null}" src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="card-img-top">
                     </a>
 
                     <div class="card-body p-2 p-md-3 d-flex flex-column">
