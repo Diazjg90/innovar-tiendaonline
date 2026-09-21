@@ -1,4 +1,5 @@
 com\innovar\tiendaonline\config\CloudinaryConfig.class
+com\innovar\tiendaonline\controller\HomeController.class
 com\innovar\tiendaonline\controller\AdminProductoController.class
 com\innovar\tiendaonline\service\FileUploadService.class
 com\innovar\tiendaonline\config\SecurityConfig.class

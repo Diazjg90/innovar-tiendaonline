@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class HomeController {
@@ -20,7 +21,6 @@ public class HomeController {
     @GetMapping("/")
     public String inicio(Model model) {
         List<Producto> productos = productoRepository.findAll();
-        // Filtra la lista para eliminar cualquier elemento nulo
         if (productos != null) {
             productos.removeIf(Objects::isNull);
         }
