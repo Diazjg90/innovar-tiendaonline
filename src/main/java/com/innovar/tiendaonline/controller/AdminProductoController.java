@@ -53,9 +53,6 @@ public class AdminProductoController {
         return "redirect:/admin/productos";
     }
 
-    productoRepository.save(producto);
-    return "redirect:/admin/productos";
-}
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
