@@ -1,0 +1,12 @@
+com\innovar\tiendaonline\config\CloudinaryConfig.class
+com\innovar\tiendaonline\controller\HomeController.class
+com\innovar\tiendaonline\controller\AdminProductoController.class
+com\innovar\tiendaonline\service\FileUploadService.class
+com\innovar\tiendaonline\config\SecurityConfig.class
+com\innovar\tiendaonline\TiendaonlineApplication.class
+com\innovar\tiendaonline\controller\CarritoController.class
+com\innovar\tiendaonline\model\ItemCarrito.class
+com\innovar\tiendaonline\model\Producto.class
+com\innovar\tiendaonline\repository\ProductoRepository.class
+com\innovar\tiendaonline\service\CloudinaryService.class
+com\innovar\tiendaonline\config\WebConfig.class

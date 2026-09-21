@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mi Carrito - innovAR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-ml { background-color: #fff159; }
+        .resumen-card { position: sticky; top: 15px; }
+        .monto-total { font-size: 1.6rem; word-break: break-all; }
+        .img-item-carrito { width: 55px; height: 55px; object-fit: cover; border-radius: 8px; }
+    </style>
+</head>
+<body class="bg-light" style="overflow-x: hidden;">
+
+    <!-- Header / Navbar -->
+    <nav class="navbar navbar-ml mb-3 shadow-sm py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold text-dark fs-4 m-0" href="/">innovAR</a>
+            <a href="/" class="btn btn-outline-dark btn-sm fw-semibold">← Volver</a>
+        </div>
+    </nav>
+
+    <div class="container my-3 px-3">
+        <h3 class="mb-3 fw-bold fs-4">🛒 Tu Carrito de Compras</h3>
+
+        <!-- Mensaje si el carrito está vacío -->
+        <div th:if="${#lists.isEmpty(carrito)}" class="alert alert-info text-center p-4 shadow-sm rounded-3">
+            <h5 class="alert-heading">¡Tu carrito está vacío!</h5>
+            <p class="small mb-3">Explora nuestro catálogo para seleccionar tus productos personalizados.</p>
+            <a href="/" class="btn btn-primary btn-sm">Ir al Catálogo</a>
+        </div>
+
+        <!-- Contenido principal cuando hay productos -->
+        <div th:unless="${#lists.isEmpty(carrito)}" class="row g-3 align-items-start">
+            
+            <!-- Columna Izquierda: Tarjetas de Productos -->
+            <div class="col-12 col-lg-8">
+                
+                <div class="card shadow-sm border-0 mb-3 p-3" th:each="item : ${carrito}">
+                    
+                    <!-- FILA SUPERIOR: Imagen + Nombre del Producto + Botón Eliminar -->
+                    <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-3 overflow-hidden">
+                            <img th:if="${item.producto.imagenUrl != null}" 
+                                 th:src="@{${p.imagenUrl}}" 
+                                 class="img-item-carrito shadow-sm" alt="Producto">
+                            <span th:if="${item.producto.imagenUrl == null}" class="badge bg-secondary p-2">Sin foto</span>
+                            
+                            <h6 class="fw-bold text-dark m-0 text-truncate" th:text="${item.producto.titulo}">
+                                Título del Producto
+                            </h6>
+                        </div>
+
+                        <!-- Botón para eliminar el producto -->
+                        <a th:href="@{/carrito/eliminar/{id}(id=${item.producto.id})}" 
+                           class="btn btn-sm btn-outline-danger border-0 fw-bold px-2 fs-5 ms-2"
+                           title="Eliminar producto">✕</a>
+                    </div>
+
+                    <!-- FILA INFERIOR: Precio Unitario | Cantidad (+ / input / -) | Subtotal -->
+                    <div class="row align-items-center text-center g-2 pt-1">
+                        
+                        <!-- Precio Unitario -->
+                        <div class="col-4 text-start">
+                            <small class="text-muted d-block" style="font-size: 0.75rem;">Precio Unitario</small>
+                            <span class="fw-semibold text-secondary" th:text="${'$' + item.producto.precio}">$0.00</span>
+                        </div>
+
+                        <!-- Cantidad con Input + Botones + y - -->
+                        <div class="col-4">
+                            <small class="text-muted d-block mb-1" style="font-size: 0.75rem;">Cantidad</small>
+                            <form th:action="@{/carrito/actualizar/{id}(id=${item.producto.id})}" method="post" class="m-0">
+                                <div class="input-group input-group-sm mx-auto" style="max-width: 110px;">
+                                    <button class="btn btn-outline-secondary fw-bold px-2" type="button" th:onclick="'modificarCantidadCarrito(' + ${item.producto.id} + ', -1)'">-</button>
+                                    
+                                    <input type="number" 
+                                           th:id="'cant-' + ${item.producto.id}"
+                                           name="cantidad" 
+                                           th:value="${item.cantidad}" 
+                                           min="1" 
+                                           max="99" 
+                                           class="form-control text-center px-1 fw-bold" 
+                                           onblur="this.form.submit()">
+                                           
+                                    <button class="btn btn-outline-secondary fw-bold px-2" type="button" th:onclick="'modificarCantidadCarrito(' + ${item.producto.id} + ', 1)'">+</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="col-4 text-end">
+                            <small class="text-muted d-block" style="font-size: 0.75rem;">Subtotal</small>
+                            <span class="fw-bold text-success fs-6" th:text="${'$' + item.subtotal}">$0.00</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Columna Derecha: Panel de Resumen -->
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm border-0 p-3 resumen-card">
+                    <h6 class="fw-bold mb-3 border-bottom pb-2">Resumen de Compra</h6>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small">Total estimado:</span>
+                        <span class="monto-total fw-bold text-success" th:text="${'$' + total}">$0.00</span>
+                    </div>
+
+                    <!-- Medios de Pago Aceptados -->
+                    <div class="bg-light rounded p-2 mb-3 border text-center">
+                        <small class="text-secondary fw-semibold d-block">💳 Medios de pago aceptados:</small>
+                        <span class="badge bg-dark text-white me-1">Transferencia</span>
+                        <span class="badge bg-success text-white">Efectivo</span>
+                    </div>
+
+                    <!-- Botón para finalizar pedido por WhatsApp -->
+                    <a th:href="@{'https://api.whatsapp.com/send?phone=5491112345678&text=' + ${mensajeWhatsapp}}" 
+                       target="_blank" 
+                       class="btn btn-success btn-lg w-100 fw-bold shadow-sm py-2 d-flex align-items-center justify-content-center gap-2 fs-6">
+                       <span>Hacer Pedido por WhatsApp</span> 📲
+                    </a>
+                    
+                    <div class="bg-light rounded p-2 mt-3 border">
+                        <p class="text-secondary small mb-0">
+                            📌 <strong>Siguiente paso:</strong> Al presionar el botón serás redirigido a WhatsApp con el detalle de tus productos para coordinar la personalización y entrega.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script JS para manejar los botones + y - -->
+    <script>
+        function modificarCantidadCarrito(id, delta) {
+            const input = document.getElementById('cant-' + id);
+            if (input) {
+                let valor = parseInt(input.value) || 1;
+                valor += delta;
+                if (valor < 1) valor = 1;
+                if (valor > 99) valor = 99;
+                input.value = valor;
+                input.form.submit();
+            }
+        }
+    </script>
+
+        <!-- Pie de página (Footer) -->
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container">
+            <!-- Enlace a Instagram -->
+            <div class="mb-2">
+                <a href="https://www.instagram.com/i.nnovar/?hl=es-la" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fs-5 d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-instagram text-warning fs-4"></i>
+                    <span class="fw-semibold">Síguenos en Instagram</span>
+                </a>
+            </div>
+            <!-- Leyenda de Derechos Reservados -->
+            <p class="text-secondary small m-0">
+                © 2026 - todos los derechos reservados
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
