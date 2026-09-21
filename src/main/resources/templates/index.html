@@ -117,7 +117,7 @@
                         <img th:if="${p?.imagenUrl != null and !#strings.isEmpty(p?.imagenUrl)}" 
                             th:src="${p.imagenUrl}" 
                             class="card-img-top" 
-                            th:alt="${producto.titulo}">
+                            th:alt="${p.titulo}">
                         
                         <!-- Imagen por defecto si no hay URL cargada -->
                         <img th:if="${p?.imagenUrl == null or #strings.isEmpty(p?.imagenUrl)}" 
