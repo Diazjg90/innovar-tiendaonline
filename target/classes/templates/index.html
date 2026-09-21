@@ -110,7 +110,7 @@
 
         <!-- Grilla de Productos -->
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-3">
-            <div class="col" th:each="producto : ${productos}">
+            <div class="col" th:each="p : ${productos}">
                 <div class="card h-100 shadow-sm">
                     
                         <!-- Imagen con validación de existencia -->
@@ -125,10 +125,10 @@
                             class="card-img-top" 
                             alt="Sin Imagen">
 
-                        <h5 th:text="${producto.titulo != null ? producto.titulo : 'Producto sin nombre'}">Título</h5>
-                        <p th:text="${'$' + (producto.precio != null ? producto.precio : 0)}">$0.00</p>
+                        <h5 th:text="${p?.titulo != null ? producto.titulo : 'Producto sin nombre'}">Título</h5>
+                        <p th:text="${'$' + (p?.precio != null ? producto.precio : 0)}">$0.00</p>
                         
-                        <a th:href="@{/producto/{id}(id=${p.id})}" class="btn btn-outline-primary btn-sm w-100 mt-auto fw-semibold">
+                        <a th:href="@{/producto/{id}(id=${p?.id})}" class="btn btn-outline-primary btn-sm w-100 mt-auto fw-semibold">
                             Ver detalle 🔍
                         </a>
                     </div>

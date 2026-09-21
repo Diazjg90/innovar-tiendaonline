@@ -20,6 +20,10 @@ public class HomeController {
     @GetMapping("/")
     public String inicio(Model model) {
         List<Producto> productos = productoRepository.findAll();
+        // Filtra la lista para eliminar cualquier elemento nulo
+        if (productos != null) {
+            productos.removeIf(Objects::isNull);
+        }
         model.addAttribute("productos", productos != null ? productos : new ArrayList<>());
         return "index";
     }
