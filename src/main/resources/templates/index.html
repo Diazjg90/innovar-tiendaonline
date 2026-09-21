@@ -110,22 +110,23 @@
 
         <!-- Grilla de Productos -->
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-3">
-            <div class="col" th:each="p : ${productos}">
+            <div class="col" th:each="producto : ${productos}">
                 <div class="card h-100 shadow-sm">
                     
-                    <a th:href="@{/producto/{id}(id=${p.id})}">
-                        <img th:if="${producto.imagenUrl != null}" th:src="{${producto.imagenUrl}}" class="card-img-top" th:alt="${p.titulo}">
-                        <img th:if="${producto.imagenUrl == null}" src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="card-img-top">
-                    </a>
-
-                    <div class="card-body p-2 p-md-3 d-flex flex-column">
-                        <span class="badge badge-cat align-self-start mb-1" th:text="${p.categoria}">Categoría</span>
+                        <!-- Imagen con validación de existencia -->
+                        <img th:if="${producto.imagenUrl != null and !#strings.isEmpty(producto.imagenUrl)}" 
+                            th:src="${producto.imagenUrl}" 
+                            class="card-img-top" 
+                            th:alt="${producto.titulo}">
                         
-                        <a th:href="@{/producto/{id}(id=${p.id})}" class="text-decoration-none text-dark">
-                            <h6 class="card-title text-truncate mb-1 fw-bold" th:text="${p.titulo}">Título</h6>
-                        </a>
+                        <!-- Imagen por defecto si no hay URL cargada -->
+                        <img th:if="${producto.imagenUrl == null or #strings.isEmpty(producto.imagenUrl)}" 
+                            src="https://via.placeholder.com/300x200?text=Sin+Imagen" 
+                            class="card-img-top" 
+                            alt="Sin Imagen">
 
-                        <p class="precio mb-2" th:text="${'$' + p.precio}">$0.00</p>
+                        <h5 th:text="${producto.titulo != null ? producto.titulo : 'Producto sin nombre'}">Título</h5>
+                        <p th:text="${'$' + (producto.precio != null ? producto.precio : 0)}">$0.00</p>
                         
                         <a th:href="@{/producto/{id}(id=${p.id})}" class="btn btn-outline-primary btn-sm w-100 mt-auto fw-semibold">
                             Ver detalle 🔍

@@ -2,6 +2,9 @@ package com.innovar.tiendaonline.controller;
 
 import com.innovar.tiendaonline.model.Producto;
 import com.innovar.tiendaonline.repository.ProductoRepository;
+
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +21,9 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(@RequestParam(name = "categoria", required = false) String categoria, Model model) {
-        if (categoria != null && !categoria.isEmpty()) {
-            model.addAttribute("productos", productoRepository.findAll().stream()
-                    .filter(p -> categoria.equalsIgnoreCase(p.getCategoria()))
-                    .toList());
-        } else {
-            model.addAttribute("productos", productoRepository.findAll());
-        }
+    public String inicio(Model model) {
+        List<Producto> productos = productoRepository.findAll();
+        model.addAttribute("productos", productos != null ? productos : new ArrayList<>());
         return "index";
     }
     // Vista de detalle del producto
