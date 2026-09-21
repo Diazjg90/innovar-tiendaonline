@@ -27,7 +27,7 @@
                 
                 <!-- Columna Izquierda: Imagen Completa -->
                 <div class="col-md-6 text-center bg-white p-3 rounded">
-                    <img th:if="${p.imagenUrl != null}" 
+                    <img th:if="${p.imagenUrl != null and !#strings.isEmpty(p?.imagenUrl)}" 
                          th:src="{${p.imagenUrl}}" 
                          class="card-img-top"
                          th:alt="${p.titulo}">
@@ -41,12 +41,12 @@
                 <div class="col-md-6 d-flex flex-column justify-content-center h-100">
                     <span class="badge bg-secondary mb-2 align-self-start" th:text="${producto.categoria}">Categoría</span>
                     <!-- Ejemplo de renderizado seguro con Thymeleaf -->
-                        <h1 th:text="${producto?.titulo}">Nombre del producto</h1>
-                        <p th:text="${producto?.descripcion}">Descripción...</p>
+                        <h1 th:text="${p?.titulo}">Nombre del producto</h1>
+                        <p th:text="${p?.descripcion}">Descripción...</p>
                         <span th:text="${'$' + producto?.precio}">$0.00</span>
 
                         <!-- Imagen con ruta segura -->
-                        <img th:src="${producto?.imagenUrl}" class="img-fluid" th:alt="${producto?.titulo}">
+                        <img th:src="${p?.imagenUrl}" class="img-fluid" th:alt="${p?.titulo}">
 
                     <!-- Formulario de Agregar al Carrito -->
                     <form th:action="@{/carrito/agregar/{id}(id=${producto.id})}" method="post" class="mt-2">
@@ -68,7 +68,7 @@
                                 🛒 Agregar al Carrito
                             </button>
 
-                            <a th:href="@{'https://api.whatsapp.com/send?phone=5491112345678&text=Hola!%20Quiero%20comprar/consultar%20por%20el%20producto:%20' + ${producto.titulo}}" 
+                            <a th:href="@{'https://api.whatsapp.com/send?phone=5491155015216&text=Hola!%20Quiero%20comprar/consultar%20por%20el%20producto:%20' + ${producto.titulo}}" 
                                target="_blank" 
                                class="btn btn-success btn-lg w-100 fw-semibold shadow-sm mt-1">
                                 Consultar por WhatsApp 💬
